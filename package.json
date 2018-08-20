@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"configure": "bash ./bin/configuredb.sh",
-		"start": "heroku config:set cross-env MODE='production' ./bin/www",
+		"start": "heroku config:set MODE='production' ./bin/www",
 		"dev": "npm run configure && nodemon ./bin/www"
 	},
 	"keywords": [],
