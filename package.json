@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"configure": "bash ./bin/configuredb.sh",
-		"start": "node MODE='production' ./bin/www",
+		"start": "cross-env MODE=production node ./bin/www",
 		"dev": "npm run configure && nodemon ./bin/www"
 	},
 	"keywords": [],
@@ -22,6 +22,7 @@
 		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
+		"cross-env": "^5.2.0",
 		"nodemon": "^1.18.2"
 	}
 }
