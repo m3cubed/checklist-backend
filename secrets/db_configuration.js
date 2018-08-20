@@ -1,6 +1,6 @@
 let user, host, databse, password;
 
-if (process.env.MODE === "production") {
+if (process.env.NODE_ENV === "production") {
 	user = "jclpbspioolsgg";
 	host = "ec2-54-235-94-36.compute-1.amazonaws.com";
 	database = "dcpbkj58pc5mfi";

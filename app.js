@@ -19,7 +19,7 @@ const responses = require("./responses");
 const app = express();
 
 const origin =
-	process.env.MODE === "production"
+	process.env.NODE_ENV === "production"
 		? "https://fa-frontend.herokuapp.com"
 		: "http://localhost:3000";
 
