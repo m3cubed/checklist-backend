@@ -24,25 +24,24 @@ const whitelist = [
 	"https://www.folio.academy/"
 ];
 
-const origin =
-	process.env.NODE_ENV === "production"
-		? (origin, callback) => {
-				if (whitelist.indexOf(origin) !== -1 || !origin) {
-					callback(null, true);
-				} else {
-					callback(new Error("Not allowed by CORS"));
-				}
-		  }
-		: "http://localhost:3000";
+const corsOption = {
+	origin:
+		process.env.NODE_ENV === "production"
+			? (origin, callback) => {
+					if (whitelist.indexOf(origin) !== -1 || !origin) {
+						callback(null, true);
+					} else {
+						callback(new Error("Not allowed by CORS"));
+					}
+			  }
+			: "http://localhost:3000",
+	credentials: true
+};
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(
-	cors({
-		origin,
-		credentials: true
-	})
-);
+app.use(cors(corsOption));
+
 app.use("/user", user);
 app.use("/courses", courses);
 app.use("/templates", templates);
