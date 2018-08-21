@@ -19,6 +19,7 @@ const responses = require("./responses");
 const app = express();
 
 const whitelist = [
+	"http://localhost:3000",
 	"https://folio-productions-fa-frontend.herokuapp.com",
 	"https://folio.academy",
 	"https://www.folio.academy"
