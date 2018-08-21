@@ -1,7 +1,12 @@
 const { Pool } = require("pg");
 const db_config = require("./secrets/db_configuration");
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL
-});
+poolParam =
+	process.env.NODE_ENV === "production"
+		? {
+				connectionString: process.env.DATABASE_URL
+		  }
+		: db_config;
+
+const pool = new Pool(poolParam);
 module.exports = pool;
