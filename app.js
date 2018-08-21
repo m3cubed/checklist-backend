@@ -20,7 +20,7 @@ const app = express();
 
 const origin =
 	process.env.NODE_ENV === "production"
-		? "https://folio-productions-fa-frontend.herokuapp.com"
+		? "https://folio-productions-fa-frontend.herokuapp.com/"
 		: "http://localhost:3000";
 
 app.use(bodyParser.json());
