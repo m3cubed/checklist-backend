@@ -18,9 +18,21 @@ const responses = require("./responses");
 
 const app = express();
 
+const whitelist = [
+	"https://folio-productions-fa-frontend.herokuapp.com/",
+	"https://folio.academy/",
+	"https://www.folio.academy/"
+];
+
 const origin =
 	process.env.NODE_ENV === "production"
-		? "https://folio-productions-fa-frontend.herokuapp.com/"
+		? (origin, callback) => {
+				if (whitelist.indexOf(origin) !== -1 || !origin) {
+					callback(null, true);
+				} else {
+					callback(new Error("Not allowed by CORS"));
+				}
+		  }
 		: "http://localhost:3000";
 
 app.use(bodyParser.json());
