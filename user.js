@@ -15,8 +15,8 @@ router.get("/all", (req, res, next) => {
 const set_session_cookie = (session_str, res) => {
 	res.cookie("session_str", session_str, {
 		expire: Date.now() + 3600000,
-		httpOnly: true
-		// secure: true
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production"
 	});
 };
 
