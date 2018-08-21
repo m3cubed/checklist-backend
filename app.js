@@ -19,9 +19,9 @@ const responses = require("./responses");
 const app = express();
 
 const whitelist = [
-	"https://folio-productions-fa-frontend.herokuapp.com/",
-	"https://folio.academy/",
-	"https://www.folio.academy/"
+	"https://folio-productions-fa-frontend.herokuapp.com",
+	"https://folio.academy",
+	"https://www.folio.academy"
 ];
 
 const corsOption = {
