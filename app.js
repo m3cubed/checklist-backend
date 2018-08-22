@@ -22,7 +22,9 @@ const whitelist = [
 	"http://localhost:3000",
 	"https://folio-productions-fa-frontend.herokuapp.com",
 	"https://folio.academy",
-	"https://www.folio.academy"
+	"https://www.folio.academy",
+	"http://www.folio.academy",
+	"http://folio.academy"
 ];
 
 const corsOption = {
