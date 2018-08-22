@@ -113,7 +113,7 @@ router.put("/update", (req, res, next) => {
 		inserts.array,
 		(q_err, q_res) => {
 			if (q_err) {
-				console.log(q_err);
+				return next(q_err);
 			}
 			res.json({
 				completed: true,

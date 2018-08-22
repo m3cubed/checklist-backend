@@ -111,7 +111,6 @@ router.post("/new", (req, res, next) => {
 		RETURNING *`,
 		inserts.array,
 		(q_err, q_res) => {
-			console.log(q_err);
 			if (q_err) {
 				return next(q_err);
 			} else {
