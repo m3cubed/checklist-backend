@@ -83,14 +83,14 @@ router.put("/retrieve", (req, res, next) => {
 });
 
 router.post("/new", (req, res, next) => {
-	const { student } = req.body;
+	const { status } = req.body;
 	let count = 1;
-	const inserts = Object.keys(student).reduce(
+	const inserts = Object.keys(status).reduce(
 		(acc, cv) => {
-			if (student[cv] !== "") {
+			if (status[cv] !== "") {
 				acc.value.push(`"${cv}"`);
 				acc.count.push(`$${count}`);
-				acc.array.push(student[cv]);
+				acc.array.push(status[cv]);
 				count++;
 			}
 			return acc;
@@ -111,6 +111,7 @@ router.post("/new", (req, res, next) => {
 		RETURNING *`,
 		inserts.array,
 		(q_err, q_res) => {
+			console.log(q_err);
 			if (q_err) {
 				return next(q_err);
 			} else {

@@ -105,7 +105,7 @@ CREATE TABLE homework_folders
 CREATE TABLE homework_check_courses
 (
     id uuid DEFAULT uuid_generate_v4() UNIQUE,
-    "creatorID" uuid REFERENCES users(id),
+    "creatorID" uuid REFERENCES users(id) ON DELETE CASCADE,
     "courseTitle" VARCHAR,
     grade VARCHAR,
     subject VARCHAR,
@@ -126,14 +126,14 @@ CREATE TABLE students
     gender VARCHAR,
     "studentCode" VARCHAR,
     "parentEmail" VARCHAR,
-    "courseID" uuid REFERENCES homework_check_courses(id),
+    "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
     PRIMARY KEY (id, "courseID")
 );
 
 CREATE TABLE homework_check_units
 (
     id uuid DEFAULT uuid_generate_v4() UNIQUE,
-    "courseID" uuid REFERENCES homework_check_courses(id),
+    "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
     "unitTitle" VARCHAR,
     "unitStartDate" VARCHAR,
     "unitEndDate" VARCHAR,
@@ -145,7 +145,7 @@ CREATE TABLE homework_check_units
 CREATE TABLE possible_homework_status
 (
     id uuid DEFAULT uuid_generate_v4() UNIQUE,
-    "courseID" uuid REFERENCES homework_check_courses(id),
+    "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
     "statusTitle" VARCHAR NOT NULL,
     "statusDescription" VARCHAR,
     "statusType" VARCHAR NOT NULL,
@@ -159,8 +159,8 @@ CREATE TABLE possible_homework_status
 CREATE TABLE homeworks
 (
     id uuid DEFAULT uuid_generate_v4() UNIQUE,
-    "courseID" uuid REFERENCES homework_check_courses(id),
-    "unitID" uuid REFERENCES homework_check_units(id),
+    "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
+    "unitID" uuid REFERENCES homework_check_units(id) ON DELETE CASCADE,
     "homeworkTitle" VARCHAR,
     "submitDate" VARCHAR NOT NULL,
     PRIMARY KEY (id, "courseID", "unitID"),
@@ -172,8 +172,8 @@ CREATE TABLE student_homework_status
 (
     id uuid DEFAULT uuid_generate_v4() UNIQUE,
     "data" JSONB NOT NULL DEFAULT '{}',
-    "courseID" uuid REFERENCES homework_check_courses(id),
-    "homeworkID" uuid REFERENCES homeworks(id),
+    "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
+    "homeworkID" uuid REFERENCES homeworks(id) ON DELETE CASCADE,
     PRIMARY KEY (id, "courseID"),
     UNIQUE("courseID", "homeworkID")
 );

@@ -90,8 +90,8 @@ router.put("/submit_answers", (req, res, next) => {
 		.then(() => {
 			pool.query(
 				`UPDATE user_poll_responses
-			SET completed = true
-			WHERE id = $1`,
+				SET completed = true
+				WHERE id = $1`,
 				[pollResponseID],
 				(q_err, q_res) => {
 					if (q_err) {

@@ -6,7 +6,6 @@ if (process.env.NODE_ENV === "production") {
 	database = "dcpbkj58pc5mfi";
 	password = process.env.DB_PASSWORD;
 } else {
-	console.log(1);
 	user = "node_user";
 	host = "localhost";
 	database = "usersdb";
