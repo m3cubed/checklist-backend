@@ -17,6 +17,31 @@ router.get("/all", (req, res, next) => {
 	);
 });
 
+router.put("/upsert", (req, res, next) => {
+	const { statusList, courseID } = req.body;
+
+	Object.keys(statusList).forEach(hwID => {
+		pool.query(
+			`INSERT INTO student_homework_status (data, "homeworkID", "courseID")
+			VALUES
+				(
+					$1,
+					$2,
+					$3
+				)
+			ON CONFLICT ("homeworkID")
+			DO
+				UPDATE
+					SET data = $1`,
+			[statusList[hwID], hwID, courseID],
+			(q_err, q_res) => {
+				console.log(q_err);
+				if (q_err) return next(err);
+			}
+		);
+	});
+});
+
 router.put("/retrieve", (req, res, next) => {
 	const { courseID } = req.body;
 	pool.query(
@@ -31,14 +56,7 @@ router.put("/retrieve", (req, res, next) => {
 				res.json({
 					completed: true,
 					studentHWStatus: q_res.rows.reduce((acc, cv) => {
-						const homeworkID = acc[cv.homeworkID];
-
-						acc[cv.homeworkID] = homeworkID
-							? {
-									...homeworkID,
-									[cv.homeworkID]: cv.data
-							  }
-							: cv;
+						acc[cv.homeworkID] = cv.data;
 						return acc;
 					}, {})
 				});

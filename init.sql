@@ -173,7 +173,7 @@ CREATE TABLE student_homework_status
     id uuid DEFAULT uuid_generate_v4() UNIQUE,
     "data" JSONB NOT NULL DEFAULT '{}',
     "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
-    "homeworkID" uuid REFERENCES homeworks(id) ON DELETE CASCADE,
+    "homeworkID" uuid UNIQUE REFERENCES homeworks(id) ON DELETE CASCADE,
     PRIMARY KEY (id, "courseID"),
     UNIQUE("courseID", "homeworkID")
 );
