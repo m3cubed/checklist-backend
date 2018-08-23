@@ -124,4 +124,38 @@ router.put(`/update`, (req, res, next) => {
 	);
 });
 
+router.post(`/insert_many`, (req, res, next) => {
+	const { students, courseID } = req.body;
+	let array = [];
+
+	students.map(student => {
+		student.push(courseID);
+		const newArray = student.join("','");
+		// console.log(newArray);
+		array.push(newArray);
+	});
+	array = array.join(`'), ('`);
+	console.log(array);
+
+	pool.query(
+		`INSERT INTO students (
+			"studentCode",
+			"firstName",
+			"lastName",
+			"studentEmail",
+			"courseID"
+		)
+		VALUES ('${array}')
+		RETURNING*`,
+		(q_err, q_res) => {
+			console.log(q_err);
+			if (q_err) return next(q_err);
+			res.json({
+				completed: true,
+				students: q_res.rows
+			});
+		}
+	);
+});
+
 module.exports = router;
