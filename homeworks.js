@@ -82,4 +82,17 @@ router.post("/new", (req, res, next) => {
 	);
 });
 
+router.put(`/delete`, (req, res, next) => {
+	const { id } = req.body;
+	pool.query(
+		`DELETE FROM homeworks
+		WHERE id =$1`,
+		[id],
+		(q_err, q_res) => {
+			if (q_err) return next(q_err);
+			res.json({ completed: true });
+		}
+	);
+});
+
 module.exports = router;

@@ -87,7 +87,7 @@ router.put("/update", (req, res, next) => {
 	let count = 1;
 	const inserts = Object.keys(course).reduce(
 		(acc, cv) => {
-			if (course[cv] !== "") {
+			if (course[cv] !== "" && cv !== "id") {
 				acc.value.push(`"${cv}"`);
 				acc.count.push(`$${count}`);
 				acc.array.push(course[cv]);

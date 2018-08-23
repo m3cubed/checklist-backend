@@ -82,4 +82,46 @@ router.post("/new", (req, res, next) => {
 	);
 });
 
+router.put(`/delete`, (req, res, next) => {
+	const { id } = req.body;
+	pool.query(
+		`DELETE FROM students
+		WHERE id = $1`,
+		[id],
+		(q_err, q_res) => {
+			if (q_err) return next(q_err);
+			res.json({ completed: true });
+		}
+	);
+});
+
+router.put(`/update`, (req, res, next) => {
+	const { student } = req.body;
+
+	const inserts = Object.keys(student).reduce((acc, cv) => {
+		if (student[cv] !== "" && cv !== "id") {
+			acc.push(`"${cv}" = '${student[cv]}'`);
+		}
+		return acc;
+	}, []);
+
+	inserts.join(",");
+	pool.query(
+		`UPDATE students
+		SET ${inserts}
+		WHERE id = '${student.id}'
+		RETURNING *`,
+		(q_err, q_res) => {
+			if (q_err) {
+				return next(q_err);
+			}
+			console.log(q_res.rows[0]);
+			res.json({
+				completed: true,
+				student: q_res.rows[0]
+			});
+		}
+	);
+});
+
 module.exports = router;

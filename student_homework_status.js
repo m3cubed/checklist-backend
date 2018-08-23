@@ -35,7 +35,7 @@ router.put("/upsert", (req, res, next) => {
 					SET data = $1`,
 			[statusList[hwID], hwID, courseID],
 			(q_err, q_res) => {
-				if (q_err) return next(err);
+				if (q_err) return next(q_err);
 			}
 		);
 	});

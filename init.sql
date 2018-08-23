@@ -125,7 +125,7 @@ CREATE TABLE students
     "lastName" VARCHAR NOT NULL,
     gender VARCHAR,
     "studentCode" VARCHAR,
-    "parentEmail" VARCHAR,
+    "parentEmail" TEXT[],
     "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
     PRIMARY KEY (id, "courseID")
 );
