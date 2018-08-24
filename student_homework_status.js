@@ -17,7 +17,7 @@ router.get("/all", (req, res, next) => {
 	);
 });
 
-router.put("/upsert", (req, res, next) => {
+router.post("/upsert", (req, res, next) => {
 	const { statusList, courseID } = req.body;
 
 	Object.keys(statusList).forEach(hwID => {
