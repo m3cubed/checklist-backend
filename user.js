@@ -80,6 +80,7 @@ router.post("/new", (req, res, next) => {
 					RETURNING *`,
 					[email_hash, hash(password), userFirstName, userLastName, status],
 					(q1_err, q1_res) => {
+						console.log(q1_err);
 						if (q1_err) return next(q1_err);
 
 						set_session(email, res)

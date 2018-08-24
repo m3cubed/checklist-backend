@@ -115,7 +115,7 @@ router.put(`/update`, (req, res, next) => {
 			if (q_err) {
 				return next(q_err);
 			}
-			console.log(q_res.rows[0]);
+
 			res.json({
 				completed: true,
 				student: q_res.rows[0]
@@ -131,11 +131,10 @@ router.post(`/insert_many`, (req, res, next) => {
 	students.map(student => {
 		student.push(courseID);
 		const newArray = student.join("','");
-		// console.log(newArray);
+
 		array.push(newArray);
 	});
 	array = array.join(`'), ('`);
-	console.log(array);
 
 	pool.query(
 		`INSERT INTO students (
@@ -148,7 +147,6 @@ router.post(`/insert_many`, (req, res, next) => {
 		VALUES ('${array}')
 		RETURNING*`,
 		(q_err, q_res) => {
-			console.log(q_err);
 			if (q_err) return next(q_err);
 			res.json({
 				completed: true,
