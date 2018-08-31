@@ -163,7 +163,7 @@ CREATE TABLE homeworks
     "courseID" uuid REFERENCES homework_check_courses(id) ON DELETE CASCADE,
     "unitID" uuid REFERENCES homework_check_units(id) ON DELETE CASCADE,
     "homeworkTitle" VARCHAR,
-    "submitDate" VARCHAR NOT NULL,
+    "submitDate" VARCHAR,
     PRIMARY KEY (id, "courseID", "unitID"),
     UNIQUE(id, "courseID"),
     UNIQUE("homeworkTitle", "unitID")
