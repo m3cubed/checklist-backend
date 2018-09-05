@@ -179,6 +179,14 @@ CREATE TABLE student_homework_status
     UNIQUE("courseID", "homeworkID")
 );
 
+CREATE TABLE seating_positions
+(
+    id uuid DEFAULT uuid_generate_v4() UNIQUE,
+    "courseID" uuid UNIQUE REFERENCES homework_check_courses(id) ON DELETE CASCADE,
+    positions JSONB NOT NULL DEFAULT '{}',
+    PRIMARY KEY (id, "courseID")
+);
+
 /*INSERTS*/
 
 INSERT INTO users

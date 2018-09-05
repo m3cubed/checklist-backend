@@ -14,6 +14,7 @@ const homework_check_units = require("./homework_check_units");
 const homeworks = require("./homeworks");
 const possible_homework_status = require("./possible_homework_status");
 const student_homework_status = require("./student_homework_status");
+const seating_positions = require("./seating_positions");
 const responses = require("./responses");
 
 const app = express();
@@ -58,6 +59,7 @@ app.use("/homework_check_units", homework_check_units);
 app.use("/homeworks/", homeworks);
 app.use("/possible_homework_status", possible_homework_status);
 app.use("/student_homework_status", student_homework_status);
+app.use("/seating_positions", seating_positions);
 
 app.use((err, req, res, next) => {
 	if (!err.statusCode) err.statusCode = 500;
