@@ -13,7 +13,7 @@ router.get("/all", (req, res, next) => {
 			} else {
 				res.json(q_res.rows);
 			}
-		}
+		},
 	);
 });
 
@@ -34,10 +34,10 @@ router.put("/retrieve", (req, res, next) => {
 					units: q_res.rows.reduce((acc, cv) => {
 						acc[cv.id] = cv;
 						return acc;
-					}, {})
+					}, {}),
 				});
 			}
-		}
+		},
 	);
 });
 
@@ -57,8 +57,8 @@ router.post("/new", (req, res, next) => {
 		{
 			value: [],
 			count: [],
-			array: []
-		}
+			array: [],
+		},
 	);
 
 	inserts.value = inserts.value.join(", ");
@@ -75,10 +75,10 @@ router.post("/new", (req, res, next) => {
 			} else {
 				res.json({
 					completed: true,
-					unit: q_res.rows[0]
+					unit: q_res.rows[0],
 				});
 			}
-		}
+		},
 	);
 });
 
@@ -91,7 +91,7 @@ router.put(`/delete`, (req, res, next) => {
 		(q_err, q_res) => {
 			if (q_err) return next(q_err);
 			res.json({ completed: true });
-		}
+		},
 	);
 });
 
