@@ -20,9 +20,10 @@ router.get("/all", (req, res, next) => {
 router.put("/upsert", (req, res, next) => {
 	const { statusList, courseID } = req.body;
 
-	Object.keys(statusList).forEach(hwID => {
-		pool.query(
-			`INSERT INTO student_homework_status (data, "homeworkID", "courseID")
+	let requests = Object.keys(statusList).map(hwID => {
+		return new Promise((resolve, reject) =>
+			pool.query(
+				`INSERT INTO student_homework_status (data, "homeworkID", "courseID")
 			VALUES
 				(
 					$1,
@@ -33,11 +34,21 @@ router.put("/upsert", (req, res, next) => {
 			DO
 				UPDATE
 					SET data = $1`,
-			[statusList[hwID], hwID, courseID],
-			(q_err, q_res) => {
-				if (q_err) return next(q_err);
-			},
+				[statusList[hwID], hwID, courseID],
+				(q_err, q_res) => {
+					if (q_err) {
+						reject();
+						return next(q_err);
+					} else {
+						resolve();
+					}
+				},
+			),
 		);
+	});
+
+	Promise.all(requests).then(() => {
+		res.json({ completed: true });
 	});
 });
 
