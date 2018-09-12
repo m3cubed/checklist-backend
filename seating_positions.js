@@ -13,11 +13,11 @@ router.get("/all", (req, res, next) => {
 			} else {
 				res.json(q_res.rows);
 			}
-		}
+		},
 	);
 });
 
-router.post("/upsert", (req, res, next) => {
+router.put("/upsert", (req, res, next) => {
 	const { seatingPositions, courseID } = req.body;
 
 	pool.query(
@@ -34,7 +34,7 @@ router.post("/upsert", (req, res, next) => {
 		[seatingPositions, courseID],
 		(q_err, q_res) => {
 			if (q_err) return next(q_err);
-		}
+		},
 	);
 });
 
@@ -51,10 +51,10 @@ router.put("/retrieve", (req, res, next) => {
 			} else {
 				res.json({
 					completed: true,
-					seatingPositions: q_res.rows[0]
+					seatingPositions: q_res.rows[0],
 				});
 			}
-		}
+		},
 	);
 });
 

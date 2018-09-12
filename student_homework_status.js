@@ -13,11 +13,11 @@ router.get("/all", (req, res, next) => {
 			} else {
 				res.json(q_res.rows);
 			}
-		}
+		},
 	);
 });
 
-router.post("/upsert", (req, res, next) => {
+router.put("/upsert", (req, res, next) => {
 	const { statusList, courseID } = req.body;
 
 	Object.keys(statusList).forEach(hwID => {
@@ -36,7 +36,7 @@ router.post("/upsert", (req, res, next) => {
 			[statusList[hwID], hwID, courseID],
 			(q_err, q_res) => {
 				if (q_err) return next(q_err);
-			}
+			},
 		);
 	});
 });
@@ -57,10 +57,10 @@ router.put("/retrieve", (req, res, next) => {
 					studentHWStatus: q_res.rows.reduce((acc, cv) => {
 						acc[cv.homeworkID] = cv.data;
 						return acc;
-					}, {})
+					}, {}),
 				});
 			}
-		}
+		},
 	);
 });
 
