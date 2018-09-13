@@ -33,7 +33,11 @@ router.put("/upsert", (req, res, next) => {
 					SET positions = $1`,
 		[seatingPositions, courseID],
 		(q_err, q_res) => {
-			if (q_err) return next(q_err);
+			if (q_err) {
+				return next(q_err);
+			} else {
+				res.json({ completed: true });
+			}
 		},
 	);
 });
