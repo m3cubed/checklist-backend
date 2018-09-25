@@ -237,16 +237,22 @@ router.post("/teacher_info", (req, res, next) => {
 
 		client.query(
 			`SELECT *
-			FROM collaborate
-			WHERE collaborator_id = $1`,
+			FROM homework_check_courses
+			WHERE id = (
+				SELECT
+					"courseID"
+				FROM collaborate
+				WHERE collaborator_id = $1
+			)`,
 			[id],
 			(q4_err, q4_res) => {
 				if (q4_err) {
 					release();
-					return next(q4_err);
+					return q4_err;
+				} else if (q4_res.rows.length === 0) {
+					result.collaborations = null;
 				} else {
-					if (q4_res.rows.length === 0) result["collaborations"] = {};
-					result["collaborations"] = q4_res.rows.reduce((acc, item) => {
+					result.collaborations = q4_res.rows.reduce((acc, item) => {
 						acc[item.id] = item;
 						return acc;
 					}, {});
