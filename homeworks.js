@@ -13,7 +13,7 @@ router.get("/all", (req, res, next) => {
 			} else {
 				res.json(q_res.rows);
 			}
-		}
+		},
 	);
 });
 
@@ -34,10 +34,10 @@ router.put("/retrieve", (req, res, next) => {
 					homeworks: q_res.rows.reduce((acc, cv) => {
 						acc[cv.id] = cv;
 						return acc;
-					}, {})
+					}, {}),
 				});
 			}
-		}
+		},
 	);
 });
 
@@ -57,8 +57,8 @@ router.post("/new", (req, res, next) => {
 		{
 			value: [],
 			count: [],
-			array: []
-		}
+			array: [],
+		},
 	);
 
 	inserts.value = inserts.value.join(", ");
@@ -75,10 +75,39 @@ router.post("/new", (req, res, next) => {
 			} else {
 				res.json({
 					completed: true,
-					homework: q_res.rows[0]
+					homework: q_res.rows[0],
 				});
 			}
+		},
+	);
+});
+
+router.put(`/update`, (req, res, next) => {
+	const { homework } = req.body;
+
+	const inserts = Object.keys(homework).reduce((acc, cv) => {
+		if (homework[cv] !== "" && cv !== "id") {
+			acc.push(`"${cv}" = '${homework[cv]}'`);
 		}
+		return acc;
+	}, []);
+
+	inserts.join(",");
+	pool.query(
+		`UPDATE homeworks
+		SET ${inserts}
+		WHERE id = '${homework.id}'
+		RETURNING *`,
+		(q_err, q_res) => {
+			if (q_err) {
+				return next(q_err);
+			}
+
+			res.json({
+				completed: true,
+				homework: q_res.rows[0],
+			});
+		},
 	);
 });
 
@@ -91,7 +120,7 @@ router.put(`/delete`, (req, res, next) => {
 		(q_err, q_res) => {
 			if (q_err) return next(q_err);
 			res.json({ completed: true });
-		}
+		},
 	);
 });
 

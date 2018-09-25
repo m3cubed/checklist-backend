@@ -16,6 +16,7 @@ const possible_homework_status = require("./possible_homework_status");
 const student_homework_status = require("./student_homework_status");
 const seating_positions = require("./seating_positions");
 const responses = require("./responses");
+const collaborate = require("./collaborate");
 
 const app = express();
 
@@ -25,7 +26,7 @@ const whitelist = [
 	"https://folio.academy",
 	"https://www.folio.academy",
 	"http://www.folio.academy",
-	"http://folio.academy"
+	"http://folio.academy",
 ];
 
 const corsOption = {
@@ -39,7 +40,7 @@ const corsOption = {
 					}
 			  }
 			: "http://localhost:3000",
-	credentials: true
+	credentials: true,
 };
 
 app.use(bodyParser.json());
@@ -60,13 +61,14 @@ app.use("/homeworks/", homeworks);
 app.use("/possible_homework_status", possible_homework_status);
 app.use("/student_homework_status", student_homework_status);
 app.use("/seating_positions", seating_positions);
+app.use("/collaborate", collaborate);
 
 app.use((err, req, res, next) => {
 	if (!err.statusCode) err.statusCode = 500;
 
 	res.status(err.statusCode).json({
 		type: "error",
-		msg: err.message
+		msg: err.message,
 	});
 });
 

@@ -187,6 +187,17 @@ CREATE TABLE seating_positions
     PRIMARY KEY (id, "courseID")
 );
 
+CREATE TABLE collaborate
+(
+    id uuid DEFAULT uuid_generate_v4() UNIQUE,
+    "courseID" uuid UNIQUE REFERENCES homework_check_courses(id) ON DELETE CASCADE,
+    collaborator_id uuid UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    can_view BOOLEAN DEFAULT false,
+    can_edit BOOLEAN DEFAULT false,
+    PRIMARY KEY (id, "courseID", collaborator_id),
+    UNIQUE("courseID", collaborator_id)
+);
+
 /*INSERTS*/
 
 INSERT INTO users

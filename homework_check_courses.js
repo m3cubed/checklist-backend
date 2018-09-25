@@ -47,7 +47,6 @@ router.post("/new", (req, res, next) => {
 	const { course } = req.body;
 
 	const reduced = insertReducer([course]);
-	console.log(insertReducer([course]));
 
 	pool.query(
 		`INSERT INTO homework_check_courses(${reduced.columns})

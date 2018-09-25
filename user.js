@@ -16,7 +16,7 @@ const set_session_cookie = (session_str, res) => {
 	res.cookie("session_str", session_str, {
 		expire: Date.now() + 3600000,
 		httpOnly: true,
-		secure: process.env.NODE_ENV === "production"
+		secure: process.env.NODE_ENV === "production",
 	});
 };
 
@@ -44,7 +44,7 @@ const set_session = (email, res, session_id) => {
 					set_session_cookie(session_str, res);
 
 					resolve();
-				}
+				},
 			);
 		}
 	});
@@ -87,19 +87,19 @@ router.post("/new", (req, res, next) => {
 							.then(() => {
 								res.json({
 									msg: "Successfully created user!",
-									user: q1_res.rows[0]
+									user: q1_res.rows[0],
 								});
 							})
 							.catch(error => next(error));
-					}
+					},
 				);
 			} else {
 				res.status(409).json({
 					type: "error",
-					msg: "This email has been taken"
+					msg: "This email has been taken",
 				});
 			}
-		}
+		},
 	);
 });
 
@@ -119,7 +119,7 @@ router.post("/login", (req, res, next) => {
 					.then(() => {
 						res.json({
 							completed: true,
-							user
+							user,
 						});
 					})
 					.catch(error => next(error));
@@ -128,7 +128,7 @@ router.post("/login", (req, res, next) => {
 					.status(400)
 					.json({ type: "error", msg: "Incorrect email/password" });
 			}
-		}
+		},
 	);
 });
 
@@ -144,7 +144,7 @@ router.get("/logout", (req, res, next) => {
 			res.clearCookie("session_str");
 
 			res.json({ msg: "Successful logout" });
-		}
+		},
 	);
 });
 
@@ -163,9 +163,9 @@ router.get("/authenticated", (req, res, next) => {
 				authenticated:
 					Session.verify(req.cookies.session_str) &&
 					q_res.rows[0].session_id === id,
-				user: q_res.rows[0]
+				user: q_res.rows[0],
 			});
-		}
+		},
 	);
 });
 
@@ -194,7 +194,7 @@ router.post("/teacher_info", (req, res, next) => {
 						return acc;
 					}, {});
 				}
-			}
+			},
 		);
 
 		client.query(
@@ -213,7 +213,7 @@ router.post("/teacher_info", (req, res, next) => {
 						return acc;
 					}, {});
 				}
-			}
+			},
 		);
 
 		client.query(
@@ -232,17 +232,36 @@ router.post("/teacher_info", (req, res, next) => {
 						return acc;
 					}, {});
 				}
-			}
+			},
 		);
 
-		client.query(`COMMIT`, (q4_err, q4_res) => {
-			if (q4_err) {
-				return next(q4_err);
+		client.query(
+			`SELECT *
+			FROM collaborate
+			WHERE collaborator_id = $1`,
+			[id],
+			(q4_err, q4_res) => {
+				if (q4_err) {
+					release();
+					return next(q4_err);
+				} else {
+					if (q4_res.rows.length === 0) result["collaborations"] = {};
+					result["collaborations"] = q4_res.rows.reduce((acc, item) => {
+						acc[item.id] = item;
+						return acc;
+					}, {});
+				}
+			},
+		);
+
+		client.query(`COMMIT`, (q5_err, q5_res) => {
+			if (q5_err) {
+				return next(q5_err);
 				release();
 			} else {
 				res.json({
 					completed: true,
-					...result
+					...result,
 				});
 				release();
 			}
@@ -274,7 +293,7 @@ router.post(`/student_info`, (req, res, next) => {
 						return acc;
 					}, {});
 				}
-			}
+			},
 		);
 		//Retrieve Polls
 		client.query(
@@ -297,7 +316,7 @@ router.post(`/student_info`, (req, res, next) => {
 						return acc;
 					}, {});
 				}
-			}
+			},
 		);
 		client.query(`COMMIT`, (q2_err, q2_res) => {
 			release();
@@ -306,11 +325,36 @@ router.post(`/student_info`, (req, res, next) => {
 			} else {
 				res.json({
 					completed: true,
-					...result
+					...result,
 				});
 			}
 		});
 	});
+});
+
+router.put("/search_for_user", (req, res, next) => {
+	const { email } = req.body;
+	const email_hash = hash(email);
+	pool.query(
+		`SELECT
+			"userFirstName",
+			"userLastName",
+			id
+		FROM users
+		WHERE email_hash = '${email_hash}'`,
+		(q1_err, q1_res) => {
+			if (q1_err) {
+				return next(q1_err);
+			} else if (q1_res.rows[0]) {
+				res.json({
+					completed: true,
+					user: q1_res.rows[0],
+				});
+			} else {
+				res.json({ completed: false });
+			}
+		},
+	);
 });
 
 module.exports = router;
